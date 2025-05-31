@@ -1494,7 +1494,8 @@
                     resultText.textContent = "Wah, hasil tes menunjukkan kamu punya potensi di berbagai bidang!";
                     // Menggabungkan semua rekomendasi dan menghapus duplikasi
                     const uniqueRekomendasi = [...new Set(rekomendasi.flatMap(item => item.split(', ').map(s => s.trim())))];
-                    uniqueRekomendasi.forEach(item => {
+                    const limitedRekomendasi = uniqueRekomendasi.slice(0, 3) 
+                    limitedRekomendasi.forEach(item => {
                         const li = document.createElement('li');
                         li.textContent = item;
                         careerRecommendations.appendChild(li);
