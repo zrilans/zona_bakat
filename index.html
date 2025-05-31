@@ -1372,62 +1372,62 @@
 
                 // Minat Linguistik/Verbal (Q1)
                 if (scores.q1 >= 4) {
-                    rekomendasi.push("Penulis, Jurnalis, Editor, Copywriter, Pendidik");
+                    rekomendasi.push("Penulis, Jurnalis, Editor");
                 }
 
                 // Minat Logika/Matematika (Q2)
                 if (scores.q2 >= 4) {
-                    rekomendasi.push("Akuntan, Data Scientist, Programmer, Insinyur, Peneliti, Ahli Statistik");
+                    rekomendasi.push("Data Scientist, Programmer, Peneliti, Ahli Statistik");
                 }
 
                 // Minat Visual/Spasial (Q3)
                 if (scores.q3 >= 4) {
-                    rekomendasi.push("Desainer Grafis, Arsitek, Animator, Fotografer, Desainer Interior");
+                    rekomendasi.push("Desainer Grafis, Arsitek, Fotografer");
                 }
 
                 // Minat Interpersonal/Sosial (Q4)
                 if (scores.q4 >= 4) {
-                    rekomendasi.push("Pekerja Sosial, Konselor, Psikolog, HRD");
+                    rekomendasi.push("Konselor, Psikolog, HRD");
                 }
 
                 // Minat Kepemimpinan/Organisasi (Q5)
                 if (scores.q5 >= 4) {
-                    rekomendasi.push("Manajer Proyek, Pemimpin Tim, Supervisor, Pengusaha");
+                    rekomendasi.push("Supervisor, Pengusaha");
                 }
 
                 // Minat Musikal (Q6)
                 if (scores.q6 >= 4) {
-                    rekomendasi.push("Musisi, Komposer, Produser Musik, Guru Musik, Terapi Musik");
+                    rekomendasi.push("Musisi, Komposer, Produser Musik");
                 }
 
                 // Minat Kinestetik/Fisik (Q7)
                 if (scores.q7 >= 4) {
-                    rekomendasi.push("Atlet, Pelatih Olahraga, Koreografer, Fisioterapis");
+                    rekomendasi.push("Atlet, Pelatih Olahraga");
                 }
 
                 // Minat Naturalis/Ilmiah (Q8 & Q15)
                 if (scores.q8 >= 4 || scores.q15 >= 4) {
-                    rekomendasi.push("Ilmuwan, Dokter Hewan, Pertanian, Ahli Lingkungan, Biolog, Peneliti");
+                    rekomendasi.push("Ilmuwan, Dokter Hewan, Pertanian");
                 }
 
                 // Minat Intrapersonal/Reflektif (Q9)
                 if (scores.q9 >= 4) {
-                    rekomendasi.push("Penulis, Filsuf, Psikolog, Peneliti, Konselor");
+                    rekomendasi.push("Filsuf, Psikolog, Peneliti, Konselor");
                 }
 
                 // Minat Mengajar/Edukasi (Q10)
                 if (scores.q10 >= 4) {
-                    rekomendasi.push("Guru (segala jenjang), Dosen, Instruktur Pelatihan, Trainer");
+                    rekomendasi.push("Guru, Dosen");
                 }
 
                 // Minat Medis/Kesehatan (Q11)
                 if (scores.q11 >= 4) {
-                    rekomendasi.push("Dokter, Perawat, Apoteker, Ahli Gizi, Terapis");
+                    rekomendasi.push("Dokter, Perawat, Apoteker");
                 }
 
                 // Minat Kedisiplinan/Fokus (Q12)
                 if (scores.q12 >= 4) {
-                    rekomendasi.push("Pilot, Kontroler Lalu Lintas Udara, Ahli Bedah");
+                    rekomendasi.push("Pilot, Ahli Bedah");
                 }
 
                 // Minat Hukum/Keadilan (Q13)
@@ -1442,49 +1442,49 @@
 
                 // Minat Lintas Budaya/Perjalanan (Q16)
                 if (scores.q16 >= 4) {
-                    rekomendasi.push("Pemandu Wisata, Awak Kabin, Jurnalis Internasional"); // Diplomat dipindahkan ke bahasa asing
+                    rekomendasi.push("Pemandu Wisata"); // Diplomat dipindahkan ke bahasa asing
                 }
 
                 // Minat Sejarah/Budaya (Q17)
                 if (scores.q17 >= 4) {
-                    rekomendasi.push("Sejarawan, Arkeolog, Kurator Museum, Pustakawan, Antropolog");
+                    rekomendasi.push("Sejarawan, Arkeolog, Kurator Museum");
                 }
 
                 // Minat Ketahanan Fisik/Mental (Q19) - Khusus TNI/Polisi
                 if (scores.q19 >= 4 && (scores.q5 >=4 || scores.q12 >=4 || scores.q13 >=4)) { // Gabungan dengan leadership/fokus/hukum
                     rekomendasi.push("TNI (Tentara Nasional Indonesia), Polisi");
                 } else if (scores.q19 >= 4) { // Jika hanya fisik kuat tapi belum tentu ke arah TNI/Polisi
-                    rekomendasi.push("Atlet Profesional, Pemadam Kebakaran, Penyelamat");
+                    rekomendasi.push("Atlet Profesional, Pemadam Kebakaran");
                 }
 
                 // Minat Keuangan (Q20)
                 if (scores.q20 >= 4) {
-                    rekomendasi.push("Analis Keuangan, Akuntan, Manajer Investasi, Banker, Konsultan Keuangan, Aktuaris");
+                    rekomendasi.push("Akuntan, Manajer Investasi, Konsultan Keuangan, Aktuaris");
                 }
 
                 // Minat Manajemen Acara/Logistik (Q21)
                 if (scores.q21 >= 4) {
-                    rekomendasi.push("Event Organizer, Manajer Proyek, Logistik & Supply Chain Manager, Manajer Hotel, Administrator");
+                    rekomendasi.push("Event Organizer, Manajer Proyek, Administrator");
                 }
 
                 // Minat Dunia Digital/Coding (Q22)
                 if (scores.q22 >= 4) {
-                    rekomendasi.push("Pengembang Software (Developer), Ilmuwan Data, Administrator Jaringan, Spesialis Keamanan Siber, Web Designer, Game Developer");
+                    rekomendasi.push("Pengembang Software (Developer), Ilmuwan Data, Administrator Jaringan, Programmer");
                 }
 
                 // Minat Negosiasi/Penjualan (Q23)
                 if (scores.q23 >= 4) {
-                    rekomendasi.push("Sales Executive, Marketing Manager, Pengusaha, Agen Properti, Manajer Hubungan Pelanggan"); // Diplomat dipindahkan ke bahasa asing
+                    rekomendasi.push("Sales Executive, Marketing Manager, Pengusaha"); // Diplomat dipindahkan ke bahasa asing
                 }
 
                 // Minat Isu Sosial (Q24)
                 if (scores.q24 >= 4) {
-                    rekomendasi.push("Pekerja Sosial, Aktivis Lingkungan/Sosial, Peneliti Sosial, Pendidik (fokus isu sosial), Jurnalis Investigasi, Sosiolog");
+                    rekomendasi.push("Peneliti Sosial, Jurnalis Investigasi, Sosiolog");
                 }
 
                 // Minat Bahasa Asing (Q25) - BARU
                 if (scores.q25 >= 4) {
-                    rekomendasi.push("Penerjemah/Juru Bahasa, Diplomat, Profesional Bisnis Internasional, Guru Bahasa Asing, Awak Kabin");
+                    rekomendasi.push("Penerjemah/Juru Bahasa, Guru Bahasa Asing");
                 }
 
 
