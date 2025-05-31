@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zona Tes Minat & Bakat - Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Umum */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* Menggunakan Inter sebagai font utama */
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            line-height: 1.6;
+            background-color: #f0f2f5; /* Background abu-abu muda */
+            color: #333;
+            overflow-x: hidden;
+            display: flex; /* Untuk layout full height */
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Form Intro Overlay */
+        #introFormWrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98); /* Lebih solid */
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #introForm {
+            text-align: center;
+            background: #fff; /* Putih bersih */
+            padding: 45px;
+            border-radius: 16px; /* Lebih melengkung */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Shadow lebih lembut dan menyebar */
+            max-width: 480px;
+            width: 90%;
+            animation: fadeInScale 0.6s ease-out; /* Animasi muncul */
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        #introForm h2 {
+            color: #00A896; /* Biru kehijauan */
+            margin-bottom: 15px;
+            font-size: 2rem; /* Lebih besar */
+            font-weight: 700;
+        }
+
+        #introForm p {
+            margin: 10px 0 30px;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        #introForm input {
+            width: 100%;
+            padding: 14px; /* Padding lebih besar */
+            border-radius: 10px; /* Sudut lebih melengkung */
+            margin-bottom: 18px;
+            border: 1px solid #e0e2e5; /* Border lebih soft */
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #introForm input:focus {
+            border-color: #00A896;
+            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.2); /* Shadow saat fokus */
+            outline: none;
+        }
+
+        #introForm button {
+            background-color: #00A896; /* Biru kehijauan */
+            color: white;
+            padding: 14px 35px; /* Padding lebih besar */
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1.15rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 168, 150, 0.2); /* Shadow tombol */
+        }
+
+        #introForm button:hover {
+            background-color: #008F80; /* Warna lebih gelap saat hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 168, 150, 0.3);
+        }
+
+        /* Header Dashboard */
+        .dashboard-header {
+            background-color: #ffffff; /* Putih bersih */
+            padding: 18px 30px;
+            color: #333; /* Teks gelap */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05); /* Shadow lebih tipis */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.8rem; /* Lebih besar */
+            margin: 0;
+            color: #00A896; /* Biru kehijauan */
+            font-weight: 700;
+        }
+
+        .dashboard-header .user-info {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .dashboard-header .user-info i {
+            margin-right: 12px;
+            font-size: 1.5rem; /* Ukuran ikon lebih besar */
+            color: #FF9F1C; /* Aksen oranye */
+        }
+
+        /* Wrapper Dashboard (Sidebar + Main Content) */
+        .dashboard-wrapper {
+            display: flex;
+            flex: 1; /* Mengisi sisa tinggi */
+            width: 100%;
+        }
+
+        /* Sidebar Navigasi */
+        .dashboard-sidebar {
+            width: 280px; /* Lebar sidebar sedikit lebih besar */
+            background-color: #ffffff; /* Putih bersih */
+            color: #333; /* Teks gelap */
+            padding: 25px 0;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            border-right: 1px solid #e0e2e5; /* Border tipis */
+        }
+
+        .dashboard-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dashboard-sidebar ul li {
+            margin-bottom: 8px; /* Spasi antar item menu */
+        }
+
+        .dashboard-sidebar ul li a {
+            color: #555; /* Warna teks default */
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 15px 30px; /* Padding lebih besar */
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            font-weight: 500;
+            font-size: 1.05rem;
+            border-left: 5px solid transparent; /* Border kiri transparan */
+        }
+
+        .dashboard-sidebar ul li a i {
+            margin-right: 18px; /* Spasi ikon lebih besar */
+            font-size: 1.3rem; /* Ukuran ikon */
+            color: #888; /* Warna ikon default */
+            transition: color 0.3s ease;
+        }
+
+        .dashboard-sidebar ul li a:hover {
+            background-color: #f0f2f5; /* Background abu-abu muda saat hover */
+            color: #00A896; /* Teks biru kehijauan saat hover */
+            transform: translateX(5px);
+        }
+
+        .dashboard-sidebar ul li a:hover i {
+            color: #00A896;
+        }
+
+        .dashboard-sidebar ul li a.active {
+            background-color: #e0f4f2; /* Background biru kehijauan sangat muda */
+            color: #008F80; /* Warna teks biru kehijauan */
+            border-left: 5px solid #00A896; /* Border kiri biru kehijauan */
+            font-weight: 600;
+        }
+
+        .dashboard-sidebar ul li a.active i {
+            color: #00A896;
+        }
+
+        /* Main Content Area */
+        #mainContentArea {
+            flex-grow: 1;
+            padding: 35px; /* Padding lebih besar */
+            background-color: #f9f9f9; /* Background lebih cerah */
+            overflow-y: auto; /* Memungkinkan scroll di area konten */
+        }
+
+        #mainContentArea > section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Animasi lebih halus */
+            transform: translateY(20px);
+        }
+
+        #mainContentArea > section.active-section {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Styling untuk konten di dalam mainContentArea */
+        .hero-dashboard {
+            background: linear-gradient(to right, #00A896, #00C6B0); /* Gradient biru kehijauan */
+            color: white;
+            padding: 60px 50px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 6px 20px rgba(0, 168, 150, 0.2); /* Shadow sesuai warna tema */
+        }
+
+        .hero-dashboard h2 {
+            font-size: 2.8rem; /* Lebih besar dan berani */
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero-dashboard p {
+            font-size: 1.2rem;
+            margin-bottom: 35px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-dashboard a {
+            background-color: #FF9F1C; /* Aksen oranye */
+            color: white; /* Teks putih */
+            padding: 16px 40px; /* Padding lebih besar */
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 159, 28, 0.3);
+        }
+
+        .hero-dashboard a:hover {
+            background-color: #E68A00; /* Warna oranye lebih gelap */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 159, 28, 0.4);
+        }
+
+        .features-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px; /* Jarak antar kartu lebih besar */
+            margin-bottom: 40px;
+        }
+
+        .feature-box-dashboard {
+            background: #fff;
+            border-radius: 16px; /* Lebih melengkung */
+            padding: 35px; /* Padding lebih besar */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* Shadow lebih lembut */
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .feature-box-dashboard:hover {
+            transform: translateY(-10px); /* Efek angkat lebih tinggi */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-box-dashboard i {
+            font-size: 4rem; /* Ikon lebih besar */
+            color: #00A896; /* Biru kehijauan */
+            margin-bottom: 25px;
+            animation: bounceIn 0.8s ease-out;
+        }
+
+        .feature-box-dashboard h3 {
+            margin-bottom: 15px;
+            color: #00A896;
+            font-size: 1.8rem; /* Ukuran judul lebih besar */
+            font-weight: 600;
+        }
+
+        .feature-box-dashboard p {
+            margin-bottom: 25px;
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .feature-box-dashboard button {
+            background-color: #FF9F1C; /* Aksen oranye */
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 159, 28, 0.2);
+        }
+
+        .feature-box-dashboard button:hover {
+            background-color: #E68A00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 159, 28, 0.3);
+        }
+
+        /* Sections (Test, Konsultasi, Eksplorasi) */
+        .section-title {
+            text-align: center;
+            color: #00A896;
+            margin-bottom: 45px; /* Margin bawah lebih besar */
+            font-size: 2.5rem; /* Judul section lebih besar */
+            font-weight: 700;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px; /* Garis lebih panjang */
+            height: 5px; /* Garis lebih tebal */
+            background-color: #FF9F1C; /* Garis aksen oranye */
+            margin: 20px auto 0;
+            border-radius: 3px;
+        }
+
+        /* Test Section */
+        .test-section form {
+            max-width: 800px; /* Lebar form lebih besar */
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 40px; /* Padding lebih besar */
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px; /* Padding lebih besar */
+            background-color: #fdfdfd; /* Agak putih */
+            border-radius: 12px;
+            border: 1px solid #e0e2e5;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Shadow tipis di dalam */
+        }
+
+        .question label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1.1rem;
+        }
+
+        .question input[type="range"] {
+            width: calc(100% - 70px); /* Sesuaikan lebar */
+            vertical-align: middle;
+            margin-right: 15px;
+            -webkit-appearance: none;
+            height: 8px;
+            background: #e0e2e5;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .question input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #00A896;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 168, 150, 0.3);
+        }
+        .question input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #00A896;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 168, 150, 0.3);
+        }
+
+
+        .question span {
+            display: inline-block;
+            width: 50px; /* Lebar span angka */
+            text-align: center;
+            font-weight: bold;
+            color: #00A896;
+            font-size: 1.1rem;
+        }
+
+        button[type="submit"],
+        button[type="reset"] {
+            display: inline-block;
+            margin: 25px 15px 0;
+            background-color: #00A896;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 168, 150, 0.2);
+        }
+
+        button[type="submit"]:hover,
+        button[type="reset"]:hover {
+            background-color: #008F80;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 168, 150, 0.3);
+        }
+
+        .result {
+            display: none;
+            opacity: 0;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #e0f4f2; /* Warna latar hasil */
+            border: 1px solid #00A896;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 600px;
+            color: #005f54; /* Warna teks hasil */
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            transform: translateY(20px);
+        }
+
+        .result.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result h3 {
+            color: #005f54;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .result p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Konsultasi Form */
+        #formKonsultasi {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        #formKonsultasi label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1.05rem;
+        }
+
+        #formKonsultasi input,
+        #formKonsultasi select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #e0e2e5;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #formKonsultasi input:focus,
+        #formKonsultasi select:focus {
+            border-color: #00A896;
+            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.2);
+            outline: none;
+        }
+
+        #formKonsultasi button {
+            background-color: #00A896;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 168, 150, 0.2);
+        }
+
+        #formKonsultasi button:hover {
+            background-color: #008F80;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 168, 150, 0.3);
+        }
+
+        #konfirmasiBooking {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #d1fae5;
+            border: 1px solid #34d399;
+            border-radius: 10px;
+            color: #065f46;
+            font-size: 1.1rem;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        #konfirmasiBooking strong {
+            color: #065f46;
+        }
+
+        /* Eksplorasi Section */
+        .explore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ukuran kartu lebih fleksibel */
+            gap: 25px;
+            padding: 0;
+            margin-bottom: 40px;
+        }
+
+        .explore-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px; /* Padding lebih besar */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .explore-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .explore-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #00A896;
+            font-size: 1.6rem; /* Judul kartu lebih besar */
+            font-weight: 600;
+        }
+
+        .explore-card p {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            font-size: 0.98rem;
+            color: #666;
+        }
+
+        .explore-card strong {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .explore-form {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .explore-form h3 {
+            color: #00A896;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .explore-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1.05rem;
+        }
+
+        .explore-form select,
+        .explore-form textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #e0e2e5;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .explore-form select:focus,
+        .explore-form textarea:focus {
+            border-color: #00A896;
+            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.2);
+            outline: none;
+        }
+
+        .explore-form textarea {
+            resize: vertical;
+            min-height: 120px; /* Tinggi textarea lebih besar */
+        }
+
+        .explore-form button {
+            background-color: #00A896;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 10px rgba(0, 168, 150, 0.2);
+        }
+
+        .explore-form button:hover {
+            background-color: #008F80;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 168, 150, 0.3);
+        }
+
+        #konfirmasiEksplorasi {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #d1fae5;
+            border: 1px solid #34d399;
+            border-radius: 10px;
+            color: #065f46;
+            font-size: 1.1rem;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333; /* Dark gray */
+            color: white;
+            text-align: center;
+            padding: 25px; /* Padding lebih besar */
+            font-size: 0.95rem;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
+            margin-top: auto; /* Untuk menempel di bawah jika konten tidak penuh */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .dashboard-sidebar {
+                width: 220px; /* Sidebar sedikit lebih kecil */
+            }
+            .dashboard-sidebar ul li a {
+                padding: 15px 20px;
+                font-size: 1rem;
+            }
+            .dashboard-sidebar ul li a i {
+                margin-right: 15px;
+            }
+            #mainContentArea {
+                padding: 25px;
+            }
+            .hero-dashboard h2 {
+                font-size: 2.2rem;
+            }
+            .hero-dashboard p {
+                font-size: 1.05rem;
+            }
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+            .dashboard-header h1 {
+                margin-bottom: 10px;
+                font-size: 1.6rem;
+            }
+            .dashboard-header .user-info {
+                margin-top: 10px;
+                font-size: 0.9rem;
+            }
+
+            .dashboard-wrapper {
+                flex-direction: column;
+            }
+            .dashboard-sidebar {
+                width: 100%;
+                padding: 15px 0;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                border-right: none;
+                border-bottom: 1px solid #e0e2e5; /* Border bawah */
+            }
+            .dashboard-sidebar ul {
+                flex-direction: row; /* Navigasi horizontal di mobile */
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+            .dashboard-sidebar ul li {
+                margin: 0 5px;
+                flex: 1; /* Memastikan item mengisi ruang */
+                text-align: center;
+            }
+            .dashboard-sidebar ul li a {
+                padding: 10px 5px; /* Padding lebih kecil */
+                flex-direction: column; /* Ikon di atas teks */
+                font-size: 0.9rem;
+                border-left: none; /* Hapus border kiri */
+                border-bottom: 3px solid transparent; /* Ganti dengan border bawah */
+            }
+            .dashboard-sidebar ul li a i {
+                margin-right: 0;
+                margin-bottom: 5px;
+                font-size: 1.2rem;
+            }
+            .dashboard-sidebar ul li a.active {
+                background-color: #e0f4f2;
+                border-left: none;
+                border-bottom: 3px solid #00A896; /* Border bawah biru kehijauan */
+            }
+
+            #mainContentArea {
+                padding: 20px;
+            }
+            .hero-dashboard {
+                padding: 40px 20px;
+            }
+            .hero-dashboard h2 {
+                font-size: 2rem;
+            }
+            .features-dashboard, .explore-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            .feature-box-dashboard, .explore-card {
+                padding: 25px;
+            }
+            .feature-box-dashboard h3, .explore-card h3 {
+                font-size: 1.4rem;
+            }
+            .test-section form, #formKonsultasi, .explore-form {
+                padding: 25px;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .dashboard-sidebar {
+                display: none; /* Sembunyikan sidebar di mobile */
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            #introForm {
+                padding: 30px;
+            }
+            #introForm h2 {
+                font-size: 1.6rem;
+            }
+            #introForm p {
+                font-size: 1rem;
+            }
+            #introForm input {
+                padding: 12px;
+            }
+            #introForm button {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+
+            .dashboard-header {
+                padding: 10px 15px;
+            }
+            .dashboard-header h1 {
+                font-size: 1.2rem;
+            }
+            /* Bottom Navigation untuk Mobile */
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #ffffff;
+                border-top: 1px solid #e0e2e5;
+                box-shadow: 0 -4px 15px rgba(0,0,0,0.1); /* Shadow lebih menonjol */
+                display: flex; /* Aktifkan flexbox untuk mobile */
+                justify-content: space-around;
+                align-items: center;
+                padding: 10px 0; /* Padding lebih besar */
+                z-index: 1000;
+            }
+
+            .bottom-nav a {
+                flex: 1;
+                text-align: center;
+                color: #666;
+                text-decoration: none;
+                font-size: 0.85rem; /* Ukuran font sedikit lebih besar */
+                padding: 8px 0; /* Padding vertikal lebih besar */
+                transition: color 0.3s ease, transform 0.2s ease;
+                display: flex; /* Untuk ikon dan teks vertikal */
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .bottom-nav a i {
+                display: block;
+                font-size: 1.5rem; /* Ukuran ikon lebih besar */
+                margin-bottom: 5px; /* Spasi antara ikon dan teks */
+                color: #888;
+                transition: color 0.3s ease;
+            }
+
+            .bottom-nav a.active {
+                color: #00A896;
+                font-weight: 600;
+            }
+
+            .bottom-nav a.active i {
+                color: #00A896;
+            }
+
+            .bottom-nav a:hover {
+                color: #00A896;
+                transform: translateY(-3px); /* Efek angkat saat hover */
+            }
+            .bottom-nav a:hover i {
+                color: #00A896;
+            }
+
+            .dashboard-sidebar {
+                display: none; /* Sembunyikan sidebar di mobile */
+            }
+
+            #mainContentArea {
+                padding: 15px;
+                padding-bottom: 80px; /* Tambahkan padding agar konten tidak tertutup bottom nav */
+            }
+            .hero-dashboard {
+                padding: 30px 15px;
+            }
+            .hero-dashboard h2 {
+                font-size: 1.8rem;
+            }
+            .hero-dashboard p {
+                font-size: 0.95rem;
+            }
+            .features-dashboard, .explore-grid {
+                grid-template-columns: 1fr;
+            }
+            .feature-box-dashboard h3, .explore-card h3 {
+                font-size: 1.3rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            .section-title::after {
+                width: 70px;
+            }
+            .test-section form, #formKonsultasi, .explore-form {
+                padding: 20px;
+            }
+            .question label {
+                font-size: 1rem;
+            }
+            .question span {
+                font-size: 1rem;
+            }
+            button[type="submit"], button[type="reset"] {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+                margin: 15px 8px 0;
+            }
+            .result p {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="introFormWrapper">
+        <form id="introForm">
+            <h2>Selamat Datang di Zona Bakat!</h2>
+            <p>Yuk, kenalan dulu sebelum kita mulai jelajahi potensimu.</p>
+            <input type="text" id="userNama" placeholder="Nama lengkap" required><br>
+            <input type="email" id="userEmail" placeholder="Email" required><br>
+            <button type="submit">Masuk Dashboard</button>
+        </form>
+    </div>
+
+    <header class="dashboard-header">
+        <h1>Zona Bakat</h1>
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i> <span id="displayUserName">Pengguna</span>
+        </div>
+    </header>
+
+        <main id="mainContentArea">
+            <section id="beranda-section" class="active-section">
+                <div class="hero-dashboard">
+                    <h2>Siap Menjelajahi Potensi Tersembunyimu?</h2>
+                    <p>Mulai perjalananmu untuk memahami minat dan bakat unikmu sekarang juga!</p>
+                    <a href="#" class="sidebar-link" data-section="tes" id="startTestBtn">Mulai Tes Bakatmu!</a>
+                </div>
+
+                <div class="features-dashboard">
+                    <div class="feature-box-dashboard">
+                        <i class="fas fa-pencil-ruler"></i>
+                        <h3>Tes Minat & Bakat</h3>
+                        <p>Dapatkan gambaran jelas tentang bakat alamimu dengan tes interaktif kami.</p>
+                        <button class="sidebar-link" data-section="tes">Mulai Tes</button>
+                    </div>
+                    <div class="feature-box-dashboard">
+                        <i class="fas fa-user-friends"></i>
+                        <h3>Sesi Konsultasi</h3>
+                        <p>Hubungkan dirimu dengan mentor ahli untuk panduan karier & pengembangan diri.</p>
+                        <button class="sidebar-link" data-section="konsultasi">Booking Sekarang</button>
+                    </div>
+                    <div class="feature-box-dashboard">
+                        <i class="fas fa-compass"></i>
+                        <h3>Eksplorasi Karier</h3>
+                        <p>Jelajahi berbagai pilihan karier dan jurusan kuliah yang selaras denganmu.</p>
+                        <button class="sidebar-link" data-section="eksplorasi">Jelajahi</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tes-section">
+                <h2 class="section-title">Tes Minat & Bakat</h2>
+                <form id="bakatForm">
+                    <div class="question">
+                        <label>1. Saya suka menulis cerita, artikel, atau menyampaikan ide melalui kata-kata.</label>
+                        <input type="range" min="0" max="5" value="3" name="q1" oninput="q1Val.innerText = this.value">
+                        <span id="q1Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>2. Saya menikmati memecahkan soal matematika, logika, atau mencari solusi sistematis.</label>
+                        <input type="range" min="0" max="5" value="3" name="q2" oninput="q2Val.innerText = this.value">
+                        <span id="q2Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>3. Saya suka membuat gambar, mendesain, atau mengatur tata letak visual.</label>
+                        <input type="range" min="0" max="5" value="3" name="q3" oninput="q3Val.innerText = this.value">
+                        <span id="q3Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>4. Saya suka berinteraksi dan membantu orang lain, terutama dalam menghadapi masalah atau kesulitan.</label>
+                        <input type="range" min="0" max="5" value="3" name="q4" oninput="q4Val.innerText = this.value">
+                        <span id="q4Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>5. Saya menikmati bekerja dalam tim, mengkoordinasi, dan mengambil peran kepemimpinan.</label>
+                        <input type="range" min="0" max="5" value="3" name="q5" oninput="q5Val.innerText = this.value">
+                        <span id="q5Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>6. Saya suka membuat atau memainkan musik, atau memiliki kepekaan terhadap ritme dan melodi.</label>
+                        <input type="range" min="0" max="5" value="3" name="q6" oninput="q6Val.innerText = this.value">
+                        <span id="q6Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>7. Saya mudah mengingat gerakan, menyukai aktivitas fisik, atau memiliki koordinasi tubuh yang baik.</label>
+                        <input type="range" min="0" max="5" value="3" name="q7" oninput="q7Val.innerText = this.value">
+                        <span id="q7Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>8. Saya tertarik pada lingkungan, alam, makhluk hidup, atau proses-proses ilmiah.</label>
+                        <input type="range" min="0" max="5" value="3" name="q8" oninput="q8Val.innerText = this.value">
+                        <span id="q8Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>9. Saya suka merenung, memahami diri sendiri, atau menganalisis perasaan dan motivasi orang lain.</label>
+                        <input type="range" min="0" max="5" value="3" name="q9" oninput="q9Val.innerText = this.value">
+                        <span id="q9Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>10. Saya suka mengajar, menjelaskan hal-hal baru kepada orang lain, atau membimbing mereka untuk paham.</label>
+                        <input type="range" min="0" max="5" value="3" name="q10" oninput="q10Val.innerText = this.value">
+                        <span id="q10Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>11. Saya tertarik pada tubuh manusia, kesehatan, dan ingin merawat atau menyembuhkan orang sakit.</label>
+                        <input type="range" min="0" max="5" value="3" name="q11" oninput="q11Val.innerText = this.value">
+                        <span id="q11Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>12. Saya memiliki kemampuan fokus yang tinggi dan bisa tetap tenang dalam situasi darurat atau tekanan.</label>
+                        <input type="range" min="0" max="5" value="3" name="q12" oninput="q12Val.innerText = this.value">
+                        <span id="q12Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>13. Saya tertarik pada aturan hukum, keadilan, dan ingin menjaga ketertiban masyarakat.</label>
+                        <input type="range" min="0" max="5" value="3" name="q13" oninput="q13Val.innerText = this.value">
+                        <span id="q13Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>14. Saya suka bekerja dengan mesin, teknologi, atau mengoperasikan peralatan yang kompleks.</label>
+                        <input type="range" min="0" max="5" value="3" name="q14" oninput="q14Val.innerText = this.value">
+                        <span id="q14Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>15. Saya punya rasa ingin tahu yang besar dan suka melakukan eksperimen atau penelitian.</label>
+                        <input type="range" min="0" max="5" value="3" name="q15" oninput="q15Val.innerText = this.value">
+                        <span id="q15Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>16. Saya suka bepergian, bertemu orang baru dari berbagai budaya, atau bekerja di lingkungan internasional.</label>
+                        <input type="range" min="0" max="5" value="3" name="q16" oninput="q16Val.innerText = this.value">
+                        <span id="q16Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>17. Saya tertarik pada sejarah, peninggalan budaya, atau ingin melestarikan warisan masa lalu.</label>
+                        <input type="range" min="0" max="5" value="3" name="q17" oninput="q17Val.innerText = this.value">
+                        <span id="q17Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>18. Saya senang memecahkan masalah praktis dan memperbaiki sesuatu yang rusak.</label>
+                        <input type="range" min="0" max="5" value="3" name="q18" oninput="q18Val.innerText = this.value">
+                        <span id="q18Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>19. Saya memiliki ketahanan fisik dan mental yang baik, serta siap menghadapi tantangan fisik.</label>
+                        <input type="range" min="0" max="5" value="3" name="q19" oninput="q19Val.innerText = this.value">
+                        <span id="q19Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>20. Saya tertarik pada bidang keuangan, investasi, atau manajemen risiko.</label>
+                        <input type="range" min="0" max="5" value="3" name="q20" oninput="q20Val.innerText = this.value">
+                        <span id="q20Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>21. Saya suka mengatur acara, mengelola logistik, atau memastikan semuanya berjalan lancar.</label>
+                        <input type="range" min="0" max="5" value="3" name="q21" oninput="q21Val.innerText = this.value">
+                        <span id="q21Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>22. Saya punya minat pada dunia digital, coding, atau pengembangan aplikasi.</label>
+                        <input type="range" min="0" max="5" value="3" name="q22" oninput="q22Val.innerText = this.value">
+                        <span id="q22Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>23. Saya senang bernegosiasi, meyakinkan orang lain, atau menjual ide/produk.</label>
+                        <input type="range" min="0" max="5" value="3" name="q23" oninput="q23Val.innerText = this.value">
+                        <span id="q23Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>24. Saya peduli terhadap isu sosial dan ingin berkontribusi pada perubahan positif di masyarakat.</label>
+                        <input type="range" min="0" max="5" value="3" name="q24" oninput="q24Val.innerText = this.value">
+                        <span id="q24Val">3</span>
+                    </div>
+                    <div class="question">
+                        <label>25. Saya tertarik untuk mempelajari bahasa asing baru atau berkomunikasi dengan orang dari budaya lain.</label>
+                        <input type="range" min="0" max="5" value="3" name="q25" oninput="q25Val.innerText = this.value">
+                        <span id="q25Val">3</span>
+                    </div>
+
+                    <button type="submit">Lihat Hasil</button>
+                    <button type="reset">Ulangi Tes</button>
+                </form>
+
+                <div id="testResult" class="result">
+                    <h3>Hasil Tes Minat & Bakatmu</h3>
+                    <p id="resultText"></p>
+                    <p>Berdasarkan jawabanmu, beberapa bidang yang mungkin cocok untukmu adalah:</p>
+                    <ul id="careerRecommendations"></ul>
+                    <p>Ingat, ini hanyalah panduan. Jelajahi lebih dalam dan temukan apa yang paling kamu sukai!</p>
+                </div>
+            </section>
+
+            <section id="konsultasi-section">
+                <h2 class="section-title">Sesi Konsultasi</h2>
+                <form id="formKonsultasi">
+                    <label for="konsultan">Pilih Konsultan:</label>
+                    <select id="konsultan" name="konsultan" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="psikologi">Psikolog Karir</option>
+                        <option value="teknologi">Mentor Bidang Teknologi</option>
+                        <option value="bisnis">Konsultan Bisnis & Kewirausahaan</option>
+                        <option value="pendidikan">Pembimbing Akademik/Pendidikan</option>
+                        <option value="militer">Penasihat Karir Militer/Kepolisian</option>
+                        <option value="bahasa">Spesialis Bahasa & Budaya</option>
+                        <option value="
+                        jurusan kuliah"> Jurusan Kuliah</option>
+                        <option value="
+                        minat&bakat">Minat & Bakat</option>
+                        <option value="
+                        pengembangan diri">Pengembangan Diri</option>
+                        </select>
+
+                    <label for="tanggal">Tanggal Konsultasi:</label>
+                    <input type="date" id="tanggal" name="tanggal" required>
+
+                    <label for="waktu">Waktu Konsultasi:</label>
+                    <select id="waktu" name="waktu" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="09:00">09:00 - 10:00 WIB</option>
+                        <option value="11:00">11:00 - 12:00 WIB</option>
+                        <option value="14:00">14:00 - 15:00 WIB</option>
+                        <option value="16:00">16:00 - 17:00 WIB</option>
+                    </select>
+
+                    <label for="topikKonsultasi">Topik Konsultasi Singkat:</label>
+                    <input type="text" id="topikKonsultasi" name="topikKonsultasi" placeholder="Contoh: Penjurusan SMA, Perencanaan Karier" required>
+
+                    <button type="submit">Booking Sekarang</button>
+                </form>
+                <div id="konfirmasiBooking"></div>
+            </section>
+
+            <section id="eksplorasi-section">
+                <h2 class="section-title">Eksplorasi Karier & Jurusan</h2>
+                <div class="explore-grid">
+                    <div class="explore-card">
+                        <h3>Desainer UI/UX</h3>
+                        <p>Cocok untuk kamu yang berbakat di bidang visual dan logika.</p>
+                        <p><strong>Keterangan:</strong> Profesi ini menuntut kreativitas visual, empati terhadap pengguna, dan kemampuan desain digital.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Pekerja Sosial (Social Worker)</h3>
+                        <p>Cocok untuk kamu yang memiliki empati tinggi dan ingin membantu sesama.</p>
+                        <p><strong>Keterangan:</strong> Profesi ini melibatkan advokasi, konseling, dan dukungan bagi individu, keluarga, dan komunitas yang membutuhkan.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Ilmuwan Data (Data Scientist)</h3>
+                        <p>Cocok untuk kamu yang tertarik dengan angka, statistik, dan menemukan pola dari data.</p>
+                        <p><strong>Keterangan:</strong> Profesi ini melibatkan analisis data besar untuk mengidentifikasi tren, membuat prediksi, dan memberikan wawasan.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Arsitek Lanskap (Landscape Architect)</h3>
+                        <p>Cocok untuk kamu yang menyukai desain, lingkungan, dan ruang terbuka hijau.</p>
+                        <p><strong>Keterangan:</strong> Profesi ini melibatkan perencanaan, perancangan, dan pengelolaan ruang luar seperti taman atau area publik.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Kurator Museum/Galeri Seni</h3>
+                        <p>Cocok untuk kamu yang memiliki minat mendalam pada sejarah, seni, dan pameran.</p>
+                        <p><strong>Keterangan:</strong> Profesi ini bertanggung jawab untuk mengelola koleksi, meneliti objek, dan merancang pameran.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Ahli Gizi (Nutritionist/Dietitian)</h3>
+                        <p>Cocok untuk kamu yang peduli dengan kesehatan, makanan, dan pola makan sehat.</p>
+                        <p><strong>Keterangan:</strong> Profesi ini memberikan saran dan panduan tentang nutrisi dan diet untuk membantu individu mencapai tujuan kesehatan.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Manajer Proyek Konstruksi</h3>
+                        <p>Cocok untuk kamu yang teliti, punya jiwa kepemimpinan, dan suka melihat sesuatu terbangun dari nol.</p>
+                        <p><strong>Keterangan:</strong> Profesi ini bertanggung jawab merencanakan, mengawasi, dan mengelola proyek pembangunan.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Akuntan Publik</h3>
+                        <p>Cocok untuk kamu yang rapi dengan angka, teliti, dan suka memecahkan masalah keuangan.</p>
+                        <p><strong>Keterangan:</strong> Profesi ini membantu individu atau perusahaan dalam mencatat, menganalisis, dan melaporkan keuangan mereka.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Petani Modern/Agropreneur</h3>
+                        <p>Cocok untuk kamu yang peduli lingkungan, suka bercocok tanam, dan punya visi bisnis.</p>
+                        <p><strong>Keterangan:</strong> Memanfaatkan teknologi untuk menghasilkan produk pertanian yang efisien dan berkualitas.</p>
+                    </div>
+                     <div class="explore-card">
+                        <h3>Mekanik Otomotif/Teknisi Kendaraan Listrik</h3>
+                        <p>Cocok untuk kamu yang suka mengutak-atik mesin, punya pemahaman teknis, dan teliti.</p>
+                        <p><strong>Keterangan:</strong> Merawat dan memperbaiki mesin kendaraan, termasuk kendaraan listrik yang sedang berkembang.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Pengelola Sumber Daya Manusia (HRD)</h3>
+                        <p>Cocok untuk kamu yang suka berinteraksi dengan orang, punya empati, dan peduli dengan kesejahteraan karyawan.</p>
+                        <p><strong>Keterangan:</strong> Mengurus rekrutmen, pelatihan, penggajian, hingga membangun budaya kerja positif.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Pendidik/Guru Vokasi</h3>
+                        <p>Cocok untuk kamu yang suka berbagi ilmu, sabar, dan ingin mencetak generasi terampil.</p>
+                        <p><strong>Keterangan:</strong> Mengajar keterampilan praktis yang relevan dengan kebutuhan industri di sekolah kejuruan atau balai latihan kerja.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Dokter</h3>
+                        <p>Cocok untuk kamu yang memiliki minat tinggi pada kesehatan, ilmu pengetahuan, dan ingin merawat orang sakit.</p>
+                        <p><strong>Keterangan:</strong> Profesi yang bertanggung jawab mendiagnosis, mengobati, dan mencegah penyakit. Membutuhkan ketelitian, empati, dan daya tahan tinggi.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Perawat</h3>
+                        <p>Cocok untuk kamu yang punya empati tinggi, telaten, dan siap membantu pasien dalam proses penyembuhan.</p>
+                        <p><strong>Keterangan:</strong> Memberikan perawatan langsung kepada pasien, membantu dokter, dan mendukung proses pemulihan. Membutuhkan kesabaran, kepedulian, dan kemampuan bekerja di bawah tekanan.</p>
+                    </div>
+                     <div class="explore-card">
+                        <h3>Pilot</h3>
+                        <p>Cocok untuk kamu yang memiliki disiplin tinggi, fokus, dan tertarik pada dunia penerbangan.</p>
+                        <p><strong>Keterangan:</strong> Bertanggung jawab menerbangkan pesawat dengan aman dan efisien. Membutuhkan kondisi fisik prima, kemampuan mengambil keputusan cepat, dan ketaatan pada prosedur.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Polisi</h3>
+                        <p>Cocok untuk kamu yang ingin menjaga ketertiban, keadilan, dan siap melayani masyarakat.</p>
+                        <p><strong>Keterangan:</strong> Menegakkan hukum, menjaga keamanan, dan melindungi warga. Membutuhkan fisik yang kuat, mental baja, integritas, dan keberanian.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>TNI (Tentara Nasional Indonesia)</h3>
+                        <p>Cocok untuk kamu yang berjiwa patriot, disiplin tinggi, dan siap membela negara.</p>
+                        <p><strong>Keterangan:</strong> Melindungi kedaulatan negara, mempertahankan wilayah, dan menjaga keutuhan bangsa. Membutuhkan fisik dan mental yang sangat kuat, loyalitas, dan dedikasi.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Penerjemah / Juru Bahasa</h3>
+                        <p>Cocok untuk kamu yang menguasai lebih dari satu bahasa dan teliti dalam menyampaikan pesan.</p>
+                        <p><strong>Keterangan:</strong> Mengubah teks atau ucapan dari satu bahasa ke bahasa lain dengan akurat dan sesuai konteks. Membutuhkan penguasaan bahasa yang mendalam dan pemahaman budaya.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Profesional Bisnis Internasional</h3>
+                        <p>Cocok untuk kamu yang tertarik pada perdagangan global dan komunikasi lintas budaya.</p>
+                        <p><strong>Keterangan:</strong> Terlibat dalam ekspor-impor, negosiasi bisnis dengan pihak asing, atau manajemen proyek global. Membutuhkan kemampuan bahasa, negosiasi, dan pemahaman ekonomi global.</p>
+                    </div>
+                    <div class="explore-card">
+                        <h3>Diplomat / Hubungan Internasional</h3>
+                        <p>Cocok untuk kamu yang peduli isu global, suka bernegosiasi, dan mewakili negara.</p>
+                        <p><strong>Keterangan:</strong> Mewakili kepentingan negara di forum internasional, menjalin hubungan antarnegara, dan menyelesaikan konflik. Membutuhkan kemampuan bahasa, diplomasi, dan pengetahuan politik global.</p>
+                    </div>
+                </div>
+
+                <div class="explore-form">
+                    <h3>Punya Karier Impian Lain?</h3>
+                    <p>Beritahu kami minatmu, dan kami akan coba berikan informasi yang relevan!</p>
+                    <label for="minatLain">Minat Karier/Jurusan yang Ingin Dieksplorasi:</label>
+                    <textarea id="minatLain" name="minatLain" placeholder="Contoh: Astronom, Pembuat Film Dokumenter, Ahli Forensik..."></textarea>
+                    <button type="button" id="submitExplore">Kirim Minat</button>
+                    <div id="konfirmasiEksplorasi"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2025 Zona Bakat
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const introFormWrapper = document.getElementById('introFormWrapper');
+            const introForm = document.getElementById('introForm');
+            const userNamaInput = document.getElementById('userNama');
+            const userEmailInput = document.getElementById('userEmail');
+            const displayUserName = document.getElementById('displayUserName');
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const mainContentArea = document.getElementById('mainContentArea');
+            const sections = mainContentArea.querySelectorAll('section');
+            const bakatForm = document.getElementById('bakatForm');
+            const testResult = document.getElementById('testResult');
+            const resultText = document.getElementById('resultText');
+            const careerRecommendations = document.getElementById('careerRecommendations');
+            const formKonsultasi = document.getElementById('formKonsultasi');
+            const konfirmasiBooking = document.getElementById('konfirmasiBooking');
+            const submitExploreBtn = document.getElementById('submitExplore');
+            const minatLainTextarea = document.getElementById('minatLain');
+            const konfirmasiEksplorasi = document.getElementById('konfirmasiEksplorasi');
+            const startTestBtn = document.getElementById('startTestBtn'); // Tombol "Mulai Tes Bakatmu!"
+
+            // Intro Form Submission
+            introForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const userName = userNamaInput.value;
+                const userEmail = userEmailInput.value;
+                displayUserName.textContent = userName;
+                localStorage.setItem('userName', userName); // Simpan nama di localStorage
+                localStorage.setItem('userEmail', userEmail); // Simpan email di localStorage
+                introFormWrapper.style.display = 'none'; // Sembunyikan overlay
+
+                // Setelah login, pastikan section "Beranda" aktif
+                showSection('beranda');
+            });
+
+            // Cek apakah nama sudah ada di localStorage saat halaman dimuat
+            const storedUserName = localStorage.getItem('userName');
+            if (storedUserName) {
+                displayUserName.textContent = storedUserName;
+                introFormWrapper.style.display = 'none'; // Langsung sembunyikan intro form
+                showSection('beranda'); // Pastikan section "Beranda" aktif
+            }
+
+            // Sidebar Navigation
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetSectionId = this.dataset.section;
+                    showSection(targetSectionId);
+
+                    // Update active class for sidebar/bottom nav links
+                    sidebarLinks.forEach(navLink => navLink.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Handle "Mulai Tes Bakatmu!" button on Beranda
+            startTestBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('tes');
+                sidebarLinks.forEach(navLink => navLink.classList.remove('active'));
+                document.querySelector('.sidebar-link[data-section="tes"]').classList.add('active');
+            });
+
+
+            function showSection(id) {
+                sections.forEach(section => {
+                    section.classList.remove('active-section');
+                });
+                const activeSection = document.getElementById(id + '-section');
+                if (activeSection) {
+                    activeSection.classList.add('active-section');
+                }
+            }
+
+            // Tes Bakat Form Submission
+            bakatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(bakatForm);
+                const scores = {};
+                for (let [name, value] of formData.entries()) {
+                    scores[name] = parseInt(value);
+                }
+
+                // Logika Penilaian (disesuaikan dengan pertanyaan baru)
+                let rekomendasi = [];
+
+                // Minat Linguistik/Verbal (Q1)
+                if (scores.q1 >= 4) {
+                    rekomendasi.push("Penulis, Jurnalis, Editor, Copywriter, Pendidik");
+                }
+
+                // Minat Logika/Matematika (Q2)
+                if (scores.q2 >= 4) {
+                    rekomendasi.push("Akuntan, Data Scientist, Programmer, Insinyur, Peneliti, Ahli Statistik");
+                }
+
+                // Minat Visual/Spasial (Q3)
+                if (scores.q3 >= 4) {
+                    rekomendasi.push("Desainer Grafis, Arsitek, Animator, Fotografer, Desainer Interior");
+                }
+
+                // Minat Interpersonal/Sosial (Q4)
+                if (scores.q4 >= 4) {
+                    rekomendasi.push("Pekerja Sosial, Konselor, Psikolog, HRD");
+                }
+
+                // Minat Kepemimpinan/Organisasi (Q5)
+                if (scores.q5 >= 4) {
+                    rekomendasi.push("Manajer Proyek, Pemimpin Tim, Supervisor, Pengusaha");
+                }
+
+                // Minat Musikal (Q6)
+                if (scores.q6 >= 4) {
+                    rekomendasi.push("Musisi, Komposer, Produser Musik, Guru Musik, Terapi Musik");
+                }
+
+                // Minat Kinestetik/Fisik (Q7)
+                if (scores.q7 >= 4) {
+                    rekomendasi.push("Atlet, Pelatih Olahraga, Koreografer, Fisioterapis");
+                }
+
+                // Minat Naturalis/Ilmiah (Q8 & Q15)
+                if (scores.q8 >= 4 || scores.q15 >= 4) {
+                    rekomendasi.push("Ilmuwan, Dokter Hewan, Pertanian, Ahli Lingkungan, Biolog, Peneliti");
+                }
+
+                // Minat Intrapersonal/Reflektif (Q9)
+                if (scores.q9 >= 4) {
+                    rekomendasi.push("Penulis, Filsuf, Psikolog, Peneliti, Konselor");
+                }
+
+                // Minat Mengajar/Edukasi (Q10)
+                if (scores.q10 >= 4) {
+                    rekomendasi.push("Guru (segala jenjang), Dosen, Instruktur Pelatihan, Trainer");
+                }
+
+                // Minat Medis/Kesehatan (Q11)
+                if (scores.q11 >= 4) {
+                    rekomendasi.push("Dokter, Perawat, Apoteker, Ahli Gizi, Terapis");
+                }
+
+                // Minat Kedisiplinan/Fokus (Q12)
+                if (scores.q12 >= 4) {
+                    rekomendasi.push("Pilot, Kontroler Lalu Lintas Udara, Ahli Bedah");
+                }
+
+                // Minat Hukum/Keadilan (Q13)
+                if (scores.q13 >= 4) {
+                    rekomendasi.push("Pengacara, Hakim, Jaksa, Penegak Hukum");
+                }
+
+                // Minat Mekanik/Teknologi (Q14 & Q18)
+                if (scores.q14 >= 4 || scores.q18 >= 4) {
+                    rekomendasi.push("Mekanik, Insinyur (Teknik Mesin/Elektro), Teknisi Komputer, Pengembang Perangkat Keras");
+                }
+
+                // Minat Lintas Budaya/Perjalanan (Q16)
+                if (scores.q16 >= 4) {
+                    rekomendasi.push("Pemandu Wisata, Awak Kabin, Jurnalis Internasional"); // Diplomat dipindahkan ke bahasa asing
+                }
+
+                // Minat Sejarah/Budaya (Q17)
+                if (scores.q17 >= 4) {
+                    rekomendasi.push("Sejarawan, Arkeolog, Kurator Museum, Pustakawan, Antropolog");
+                }
+
+                // Minat Ketahanan Fisik/Mental (Q19) - Khusus TNI/Polisi
+                if (scores.q19 >= 4 && (scores.q5 >=4 || scores.q12 >=4 || scores.q13 >=4)) { // Gabungan dengan leadership/fokus/hukum
+                    rekomendasi.push("TNI (Tentara Nasional Indonesia), Polisi");
+                } else if (scores.q19 >= 4) { // Jika hanya fisik kuat tapi belum tentu ke arah TNI/Polisi
+                    rekomendasi.push("Atlet Profesional, Pemadam Kebakaran, Penyelamat");
+                }
+
+                // Minat Keuangan (Q20)
+                if (scores.q20 >= 4) {
+                    rekomendasi.push("Analis Keuangan, Akuntan, Manajer Investasi, Banker, Konsultan Keuangan, Aktuaris");
+                }
+
+                // Minat Manajemen Acara/Logistik (Q21)
+                if (scores.q21 >= 4) {
+                    rekomendasi.push("Event Organizer, Manajer Proyek, Logistik & Supply Chain Manager, Manajer Hotel, Administrator");
+                }
+
+                // Minat Dunia Digital/Coding (Q22)
+                if (scores.q22 >= 4) {
+                    rekomendasi.push("Pengembang Software (Developer), Ilmuwan Data, Administrator Jaringan, Spesialis Keamanan Siber, Web Designer, Game Developer");
+                }
+
+                // Minat Negosiasi/Penjualan (Q23)
+                if (scores.q23 >= 4) {
+                    rekomendasi.push("Sales Executive, Marketing Manager, Pengusaha, Agen Properti, Manajer Hubungan Pelanggan"); // Diplomat dipindahkan ke bahasa asing
+                }
+
+                // Minat Isu Sosial (Q24)
+                if (scores.q24 >= 4) {
+                    rekomendasi.push("Pekerja Sosial, Aktivis Lingkungan/Sosial, Peneliti Sosial, Pendidik (fokus isu sosial), Jurnalis Investigasi, Sosiolog");
+                }
+
+                // Minat Bahasa Asing (Q25) - BARU
+                if (scores.q25 >= 4) {
+                    rekomendasi.push("Penerjemah/Juru Bahasa, Diplomat, Profesional Bisnis Internasional, Guru Bahasa Asing, Awak Kabin");
+                }
+
+
+                // Menampilkan hasil
+                careerRecommendations.innerHTML = ''; // Kosongkan rekomendasi sebelumnya
+                if (rekomendasi.length > 0) {
+                    resultText.textContent = "Wah, hasil tes menunjukkan kamu punya potensi di berbagai bidang!";
+                    // Menggabungkan semua rekomendasi dan menghapus duplikasi
+                    const uniqueRekomendasi = [...new Set(rekomendasi.flatMap(item => item.split(', ').map(s => s.trim())))];
+                    uniqueRekomendasi.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        careerRecommendations.appendChild(li);
+                    });
+                } else {
+                    resultText.textContent = "Kami tidak menemukan rekomendasi spesifik berdasarkan jawabanmu. Mungkin kamu punya minat yang lebih luas atau perlu eksplorasi lebih lanjut!";
+                    careerRecommendations.innerHTML = "<li>Coba jelajahi bagian Eksplorasi Karier untuk menemukan lebih banyak ide.</li>";
+                }
+
+                testResult.classList.add('show');
+                testResult.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Reset Tes Bakat
+            bakatForm.addEventListener('reset', function() {
+                testResult.classList.remove('show');
+                resultText.textContent = '';
+                careerRecommendations.innerHTML = '';
+                // Set semua range kembali ke 3
+                const rangeInputs = bakatForm.querySelectorAll('input[type="range"]');
+                rangeInputs.forEach(input => {
+                    input.value = 3;
+                    input.nextElementSibling.innerText = 3;
+                });
+            });
+
+
+            // Konsultasi Form Submission
+            formKonsultasi.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const konsultan = document.getElementById('konsultan').value;
+                const tanggal = document.getElementById('tanggal').value;
+                const waktu = document.getElementById('waktu').value;
+                const topik = document.getElementById('topikKonsultasi').value.trim();
+
+                if (konsultan && tanggal && waktu && topik) {
+                    konfirmasiBooking.innerHTML = `
+                        <p>✅ <strong>Booking berhasil!</strong></p>
+                        <p>Kamu telah memilih konsultasi dengan <strong>${konsultan}</strong> pada <strong>${tanggal}</strong>, jam <strong>${waktu}</strong>.</p>
+                        <p>Topik pembahasanmu: "<strong>${topik}</strong>"</p>
+                        <p>Kami akan segera menghubungi kamu untuk konfirmasi lanjutan.</p>
+                    `;
+                    konfirmasiBooking.style.display = 'block';
+                    formKonsultasi.reset();
+                    konfirmasiBooking.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    konfirmasiBooking.innerHTML = `<p style="color: red;">⚠️ Mohon lengkapi semua data konsultasi terlebih dahulu.</p>`;
+                    konfirmasiBooking.style.display = 'block';
+                    konfirmasiBooking.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+
+            // Eksplorasi Minat Lain Submission
+            submitExploreBtn.addEventListener('click', function() {
+                const minatLain = minatLainTextarea.value.trim();
+                if (minatLain) {
+                    konfirmasiEksplorasi.innerHTML = `
+                        <p>Terima kasih! Minatmu pada <strong>"${minatLain}"</strong> telah kami terima.</p>
+                        <p>Kami akan mencoba memberikan informasi yang relevan di kemudian hari atau menyarankan mentor yang cocok.</p>
+                    `;
+                    konfirmasiEksplorasi.style.display = 'block';
+                    minatLainTextarea.value = ''; // Kosongkan textarea
+                    konfirmasiEksplorasi.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    konfirmasiEksplorasi.innerHTML = '<p style="color: red;">Mohon masukkan minat yang ingin dieksplorasi.</p>';
+                    konfirmasiEksplorasi.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
